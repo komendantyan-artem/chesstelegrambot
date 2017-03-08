@@ -1,6 +1,5 @@
 from piece_types import *
 from moves_of_pieces import *
-from evaluation import *
 from move import *
 import move_generation
 
@@ -166,67 +165,8 @@ class Position:
 
     generate_moves = move_generation.generate_moves
     generate_captures = move_generation.generate_captures
-    
-    def evaluate(self):
-        evaluation = 0
-        for i in range(2, 10):
-            for j in range(2, 10):
-                tmp = self.board[i][j]
-                evaluation += PST[tmp][i - 2][j - 2]
-        return evaluation
-    
-    def quiescence(self, alpha, beta):
-        evaluation = self.evaluate() * self.turn_to_move       
-        if evaluation >= beta:
-            return evaluation
-        if evaluation > alpha:
-            alpha = evaluation
-        possible_moves = self.generate_captures()
-        if len(possible_moves) == 0:
-            return evaluation         
-        for move in possible_moves:
-            self.make_move(move)
-            score = -self.quiescence(-beta, -alpha)
-            self.unmake_move(move)
-            if score >= beta:
-                return beta
-            if score > alpha:
-                alpha = score
-        return alpha
-    
-    def alphabeta(self, alpha, beta, depth):
-        possible_moves = self.generate_moves()
-        if len(possible_moves) == 0:
-            if self.in_check(self.turn_to_move):
-                return LOSING
-            return DRAW
-        if depth == 0:
-            return self.quiescence(alpha, beta)
-        possible_moves.sort(key=captures_in_begin)
-        for move in possible_moves:
-            self.make_move(move)
-            score = -self.alphabeta(-beta, -alpha, depth-1)
-            self.unmake_move(move)
-            if score >= beta:
-                return beta
-            if score > alpha:
-                alpha = score
-        return alpha
-    
-    def search(self, depth=2):
-        alpha, beta = -1000000, 1000000
-        bestmove = None
-        possible_moves = self.generate_moves()
-        possible_moves.sort(key=captures_in_begin)
-        for move in possible_moves:
-            self.make_move(move)
-            score = -self.alphabeta(-beta, -alpha, depth-1)
-            self.unmake_move(move)
-            if score > alpha:
-                bestmove = move
-                alpha = score
-        return bestmove
-                    
+
+
 
 def parse_move(string):
     turn = {'q': QUEEN, 'r': ROOK, 'b': BISHOP, 'n': KNIGHT}
