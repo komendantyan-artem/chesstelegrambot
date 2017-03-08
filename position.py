@@ -19,9 +19,7 @@ class Position:
         self.setup()
 
     def __str__(self):
-        piece_to_str = dict(zip(list(range(1, 7)) + list(range(-1, -7, -1)) + [0
-                                                                               ],
-                                "KQRBNPkqrbnp."))
+        piece_to_str = dict(zip(range(-6, 7), "pnbrqk.KQRBNP"))
         string = ""
         for i in reversed(self.board[2:10]):
             string += '\n'

@@ -85,7 +85,8 @@ def generate_moves(self):
                          i == horizontal_2 + 3 * direction_of_pawns):
                         movelist.append(Move((i, j),
                                              (i + direction_of_pawns, j + k),
-                                             broken=PAWN * -self.turn_to_move),
+                                             broken=(
+                                                 PAWN * -self.turn_to_move),
                                              en_passant=1))
             elif type_of_figure == KING:
                 for k, l in moves_of_king:
