@@ -31,7 +31,7 @@ def castling_is_possible(self, horizontal_of_king, which_castling):
 def generate_moves(self):
     movelist = []
     direction_of_pawns = self.turn_to_move
-    horizontal_2 = 3 if direction_of_pawns == 1 else 8
+    second_horizontal = 3 if direction_of_pawns == 1 else 8
     for i in range(2, 10):
         for j in range(2, 10):
             if color_of(self.board[i][j]) != self.turn_to_move:
@@ -64,7 +64,7 @@ def generate_moves(self):
                     else:
                         movelist.append(
                             Move((i, j), (i + direction_of_pawns, j)))
-                    if(i == horizontal_2 and
+                    if(i == second_horizontal and
                        self.board[i + 2 * direction_of_pawns][j] == 0):
                         movelist.append(
                             Move((i, j), (i + 2 * direction_of_pawns, j)))
@@ -82,7 +82,7 @@ def generate_moves(self):
                                                  (i + direction_of_pawns, j + k),
                                                  broken=tmp))
                     elif(self.en_passant == j + k and
-                         i == horizontal_2 + 3 * direction_of_pawns):
+                         i == second_horizontal + 3 * direction_of_pawns):
                         movelist.append(Move((i, j),
                                              (i + direction_of_pawns, j + k),
                                              broken=(
