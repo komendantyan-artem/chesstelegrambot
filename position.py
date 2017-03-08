@@ -3,6 +3,7 @@ from moves_of_pieces import *
 from move import *
 import move_generation
 
+
 class Position:
     def __init__(self):
         self.board = [[0 for i in range(12)] for j in range(12)]
@@ -18,15 +19,16 @@ class Position:
         self.setup()
 
     def __str__(self):
-        piece_to_str = dict(zip(list(range(1, 7)) + list(range(-1,-7,-1)) + [0],
-                             "KQRBNPkqrbnp."))
+        piece_to_str = dict(zip(list(range(1, 7)) + list(range(-1, -7, -1)) + [0
+                                                                               ],
+                                "KQRBNPkqrbnp."))
         string = ""
         for i in reversed(self.board[2:10]):
             string += '\n'
             for j in i[2: 10]:
                 string += piece_to_str[j]
         return string
-    
+
     def __repr__(self):
         return (repr(self.board) + repr(self.turn_to_move) +
                 repr(self.castling) + repr(self.en_passant))
@@ -36,14 +38,14 @@ class Position:
             fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
         tmp = fen.split()
         arrangement_of_pieces = tmp[0]
-        turn_to_move           = tmp[1]
-        possible_castling      = tmp[2]
-        en_passant             = tmp[3]
+        turn_to_move = tmp[1]
+        possible_castling = tmp[2]
+        en_passant = tmp[3]
         number_of_insignificant_plies = int(tmp[4])
-        number_of_moves               = int(tmp[5])
+        number_of_moves = int(tmp[5])
         horizontal, vertical = 9, 2
         str_to_piece = dict(zip("KQRBNPkqrbnp",
-                             list(range(1, 7)) + list(range(-1,-7,-1))))
+                                list(range(1, 7)) + list(range(-1, -7, -1))))
         for i in arrangement_of_pieces:
             if i == '/':
                 horizontal -= 1
@@ -54,7 +56,7 @@ class Position:
             else:
                 number = int(i)
                 for j in range(number):
-                    self.board[horizontal][vertical+j] = 0
+                    self.board[horizontal][vertical + j] = 0
                 vertical += number
         self.turn_to_move = WHITE if turn_to_move == 'w' else BLACK
         self.castling[0] = int('K' in possible_castling)
@@ -65,7 +67,7 @@ class Position:
             self.en_passant = 2 + "abcdefgh".index(en_passant[0])
         else:
             self.en_passant = 0
-    
+
     def make_move(self, move):
         move.copies_of_flags = (self.castling[:], self.en_passant)
         h1, v1 = move.start
@@ -147,17 +149,17 @@ class Position:
                 return True
         for k, l in directions_of_rook:
             for n in range(1, 10):
-                tmp = self.board[x + k*n][y + l*n]
+                tmp = self.board[x + k * n][y + l * n]
                 if (color_of(tmp) == -color_of_king and
-                type_of(tmp) in (QUEEN, ROOK)):
+                        type_of(tmp) in (QUEEN, ROOK)):
                     return True
                 if tmp != 0:
                     break
         for k, l in directions_of_bishop:
             for n in range(1, 10):
-                tmp = self.board[x + k*n][y + l*n]
+                tmp = self.board[x + k * n][y + l * n]
                 if (color_of(tmp) == -color_of_king and
-                type_of(tmp) in (QUEEN, BISHOP)):
+                        type_of(tmp) in (QUEEN, BISHOP)):
                     return True
                 if tmp != 0:
                     break

@@ -1,19 +1,18 @@
-# coding: utf-8
-
 from position import Position
 from search import Search
 from move import Move
 import piece_types as ptypes
-from collections import defaultdict 
+from collections import defaultdict
 
-class Game:    
+
+class Game:
     def __init__(self, our_color=ptypes.WHITE):
         self.position = Position()
         self.our_color = our_color
         self.positions_count = defaultdict(int)
         self.number_of_insignificant_plies = 0
         self.positions_count[repr(self.position)] += 1
-    
+
     def make_move(self, move):
         piece = self.position.board[move.start[0]][move.start[1]]
         if ptypes.type_of(piece) == ptypes.PAWN:
@@ -24,41 +23,41 @@ class Game:
             self.number_of_insignificant_plies += 1
         self.position.make_move(move)
         self.positions_count[repr(self.position)] += 1
-        
+
     def is_draw_by_repetion(self):
         for position in self.positions_count:
             if self.positions_count[position] >= 3:
                 return True
         return False
-    
+
     def is_draw_by_fifty_moves(self):
         return self.number_of_insignificant_plies >= 2 * 50
-        
+
     def is_stalemate(self):
         if self.position.generate_moves():
             return False
         return not self.position.in_check(self.position.turn_to_move)
-    
+
     def is_mate(self):
         if self.position.generate_moves():
-            return False        
+            return False
         return self.position.in_check(self.position.turn_to_move)
-    
+
     def get_end_verdict(self):
         if self.is_draw_by_repetion():
-            return "ГЌГЁГ·ГјГї ГЁГ§-Г§Г  ГІГ°ГҐГµГЄГ°Г ГІГ­Г®ГЈГ® ГЇГ®ГўГІГ®Г°ГҐГ­ГЁГї ГµГ®Г¤Г®Гў"
+            return "Ничья из-за трехкратного повторения ходов"
         if self.is_draw_by_fifty_moves():
-            return "ГЌГЁГ·ГјГї ГЇГ® ГЇГ°Г ГўГЁГ«Гі ГЇГїГІГЁГ¤ГҐГ±ГїГІГЁ ГµГ®Г¤Г®Гў"
+            return "Ничья по правилу пятидесяти ходов"
         if self.is_stalemate():
             if self.position.turn_to_move == self.our_color:
-                return "Г‚Г Г¬ ГЇГ®Г±ГІГ ГўГЁГ«ГЁ ГЇГ ГІ. ГЌГЁГ·ГјГї"
-            return "Г‚Г» ГЇГ®Г±ГІГ ГўГЁГ«ГЁ ГЇГ ГІ. ГЌГЁГ·ГјГї"
+                return "Вам поставили пат. Ничья"
+            return "Вы поставили пат. Ничья"
         if self.is_mate():
             if self.position.turn_to_move == self.our_color:
-                return "Г‚Г Г¬ ГЇГ®Г±ГІГ ГўГЁГ«ГЁ Г¬Г ГІ :("
-            return "Г‚Г» ГЇГ®Г±ГІГ ГўГЁГ«ГЁ Г¬Г ГІ. ГЏГ®Г§Г¤Г°Г ГўГ«ГїГѕ!"
-        return None    
-    
+                return "Вам поставили мат :("
+            return "Вы поставили мат. Поздравляю!"
+        return None
+
     def string_to_move(self, string):
         string = string.lower().replace(' ', '')
         str_to_piece = {
@@ -67,7 +66,7 @@ class Game:
             'b': ptypes.BISHOP,
             'n': ptypes.KNIGHT
         }
-        vertical   = dict(zip("abcdefgh", range(2, 10)))
+        vertical = dict(zip("abcdefgh", range(2, 10)))
         horizontal = dict(zip("12345678", range(2, 10)))
         start = to = turn = 0
         if len(string) == 5:
@@ -76,7 +75,7 @@ class Game:
             turn = str_to_piece[string[4]]
         elif len(string) != 4:
             return None
-        if not(string[0] in vertical   and string[2] in vertical and
+        if not(string[0] in vertical and string[2] in vertical and
                string[1] in horizontal and string[3] in horizontal):
             return None
         start = (horizontal[string[1]], vertical[string[0]])
@@ -85,7 +84,7 @@ class Game:
             if (move.start, move.to, move.turn) == (start, to, turn):
                 return move
         return None
-    
+
     def get_move_of_bot(self):
         return Search(self.position).get_best_move()
 
@@ -103,14 +102,12 @@ def run():
             while not move:
                 move = game.string_to_move(input())
                 if not move:
-                    print("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»Г© ГґГ®Г°Г¬Г ГІ ГўГўГ®Г¤Г  ГЁГ«ГЁ ГµГ®Г¤ Г­ГҐГўГ®Г§Г¬Г®Г¦ГҐГ­")
+                    print("Неправильный формат ввода или ход невозможен")
         else:
             move = game.get_move_of_bot()
         game.make_move(move)
         print(game.position)
-                                           
-    
-    
+
+
 if __name__ == "__main__":
     run()
-    

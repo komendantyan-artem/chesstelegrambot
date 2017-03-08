@@ -7,6 +7,6 @@ class Move:
         self.turn = turn
         self.copies_of_flags = None
 
-   
+
 def captures_in_begin(move):
     return not move.broken
