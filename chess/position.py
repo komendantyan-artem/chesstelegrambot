@@ -1,7 +1,7 @@
-from piece_types import *
-from moves_of_pieces import *
-from move import *
-import move_generation
+from .piece_types import *
+from .moves_of_pieces import *
+from .move import *
+from . import move_generation
 
 
 class Position:

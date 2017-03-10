@@ -1,4 +1,4 @@
-from piece_types import *
+from .piece_types import *
 
 # Piece-square tables are from
 # http://chessprogramming.wikispaces.com/Simplified+evaluation+function

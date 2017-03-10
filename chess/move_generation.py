@@ -1,6 +1,6 @@
-from piece_types import *
-from moves_of_pieces import *
-from move import Move
+from .piece_types import *
+from .moves_of_pieces import *
+from .move import Move
 
 
 def castling_is_possible(self, horizontal_of_king, which_castling):

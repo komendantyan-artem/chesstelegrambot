@@ -1,7 +1,7 @@
-from piece_types import *
-from moves_of_pieces import *
-from move import *
-from evaluation import *
+from .piece_types import *
+from .moves_of_pieces import *
+from .move import *
+from .evaluation import *
 
 
 class Search:
@@ -39,7 +39,7 @@ class Search:
     def alphabeta(self, alpha, beta, depth):
         possible_moves = self.position.generate_moves()
         if len(possible_moves) == 0:
-            if self.position.in_check(self.turn_to_move):
+            if self.position.in_check(self.position.turn_to_move):
                 return LOSING
             return DRAW
         if depth == 0:
