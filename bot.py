@@ -12,7 +12,6 @@ def help(message):
     with open("help.txt") as help:
         bot.send_message(message.chat.id, help.read())
 
-
 @bot.message_handler(commands=["stop"])  
 def stop(message):
     global game
@@ -49,6 +48,7 @@ def move(message):
         
 def output_board(chat_id, boards):
     bot.send_message(chat_id, '\n\n'.join(boards))
+
 
 if __name__ == '__main__':
      bot.polling(none_stop=True)
