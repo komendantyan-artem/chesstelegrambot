@@ -101,13 +101,12 @@ class Game:
     def step(self, string):
         move = self.string_to_move(string)
         if not move:
-            return "Неправильный формат ввода или ход невозможен"
+            return ["Неправильный формат ввода или ход невозможен"]
         result = []
         self.make_move(move)
         result.append(str(self.position).replace('.', '#'))
         if self.get_end_verdict():
-            return
+            return result
         self.make_move(self.get_move_of_bot())
-        if not self.get_end_verdict():
-            result.append(str(self.position).replace('.', '#'))
+        result.append(str(self.position).replace('.', '#'))
         return result
