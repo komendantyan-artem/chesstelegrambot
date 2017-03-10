@@ -1,14 +1,17 @@
-from position import Position
-from search import Search
-from move import Move
-import piece_types as ptypes
+# -*- coding: utf-8 -*-
+
+from .position import Position
+from .search import Search
+from .move import Move
+from . import piece_types as ptypes
 from collections import defaultdict
 
 
 class Game:
-    def __init__(self, our_color=ptypes.WHITE):
+    def __init__(self, color):
+        assert(color in ["white", "black"])
         self.position = Position()
-        self.our_color = our_color
+        self.our_color = ptypes.WHITE if color == "white" else ptypes.BLACK
         self.positions_count = defaultdict(int)
         self.number_of_insignificant_plies = 0
         self.positions_count[repr(self.position)] += 1
@@ -45,17 +48,17 @@ class Game:
 
     def get_end_verdict(self):
         if self.is_draw_by_repetion():
-            return "Íè÷üÿ èç-çà òðåõêðàòíîãî ïîâòîðåíèÿ õîäîâ"
+            return "Ничья из-за трехкратного повторения ходов"
         if self.is_draw_by_fifty_moves():
-            return "Íè÷üÿ ïî ïðàâèëó ïÿòèäåñÿòè õîäîâ"
+            return "Ничья по правилу пятидесяти ходов"
         if self.is_stalemate():
             if self.position.turn_to_move == self.our_color:
-                return "Âàì ïîñòàâèëè ïàò. Íè÷üÿ"
-            return "Âû ïîñòàâèëè ïàò. Íè÷üÿ"
+                return "Вам поставили пат. Ничья"
+            return "Вы поставили пат. Ничья"
         if self.is_mate():
             if self.position.turn_to_move == self.our_color:
-                return "Âàì ïîñòàâèëè ìàò :("
-            return "Âû ïîñòàâèëè ìàò. Ïîçäðàâëÿþ!"
+                return "Вам поставили мат :("
+            return "Вы поставили мат. Поздравляю!"
         return None
 
     def string_to_move(self, string):
@@ -87,27 +90,24 @@ class Game:
 
     def get_move_of_bot(self):
         return Search(self.position).get_best_move()
-
-
-def run():
-    game = Game(ptypes.WHITE)
-    print(game.position)
-    while True:
-        verdict = game.get_end_verdict()
-        if verdict:
-            print(verdict)
-            return
-        move = None
-        if game.position.turn_to_move == game.our_color:
-            while not move:
-                move = game.string_to_move(input())
-                if not move:
-                    print("Íåïðàâèëüíûé ôîðìàò ââîäà èëè õîä íåâîçìîæåí")
+    
+    def start_game(self):
+        if self.position.turn_to_move == self.our_color:
+            return [str(self.position).replace('.', '#')]
         else:
-            move = game.get_move_of_bot()
-        game.make_move(move)
-        print(game.position)
-
-
-if __name__ == "__main__":
-    run()
+            self.make_move(self.get_move_of_bot())
+            return [str(self.position).replace('.', '#')]
+        
+    def step(self, string):
+        move = self.string_to_move(string)
+        if not move:
+            return "Неправильный формат ввода или ход невозможен"
+        result = []
+        self.make_move(move)
+        result.append(str(self.position).replace('.', '#'))
+        if self.get_end_verdict():
+            return
+        self.make_move(self.get_move_of_bot())
+        if not self.get_end_verdict():
+            result.append(str(self.position).replace('.', '#'))
+        return result
