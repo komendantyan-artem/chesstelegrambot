@@ -9,21 +9,8 @@ bot = telebot.TeleBot(config.token)
 
 @bot.message_handler(commands=["help"])
 def help(message):
-    bot.send_message(message.chat.id, '''
-Введите /start white или /start black чтобы начать игру за соответствующий цвет.
-Введите /stop чтобы закончить начатую игру
-Во время игры ходы передаются в формате /move 'поле, где стоит фигура', 'поле куда идет фигура' и опционально 'в какую фигуру превращается пешка'
-Например,
-/move e2e4
-/move g1f3
-Для короткой рокировки
-/move e1g1
-Для превращения пешки
-/move g7h8q
-/move e7f8r
-/move e7f8b
-/move e7f8n
-Вводить ход можно прописными и заглавными буквами с любым количеством пробелов''')
+    with open("help.txt") as help:
+        bot.send_message(message.chat.id, help.read())
 
 
 @bot.message_handler(commands=["stop"])  
