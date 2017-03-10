@@ -1,4 +1,4 @@
-from piece_types import *
+from .piece_types import *
 
 moves_of_knight = [(2, 1), (-2, 1), (2, -1), (-2, -1),
                    (1, 2), (-1, 2), (1, -2), (-1, -2)]
