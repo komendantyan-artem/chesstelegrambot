@@ -45,17 +45,17 @@ class Game:
 
     def get_end_verdict(self):
         if self.is_draw_by_repetion():
-            return "Ничья из-за трехкратного повторения ходов"
+            return "ГЌГЁГ·ГјГї ГЁГ§-Г§Г  ГІГ°ГҐГµГЄГ°Г ГІГ­Г®ГЈГ® ГЇГ®ГўГІГ®Г°ГҐГ­ГЁГї ГµГ®Г¤Г®Гў"
         if self.is_draw_by_fifty_moves():
-            return "Ничья по правилу пятидесяти ходов"
+            return "ГЌГЁГ·ГјГї ГЇГ® ГЇГ°Г ГўГЁГ«Гі ГЇГїГІГЁГ¤ГҐГ±ГїГІГЁ ГµГ®Г¤Г®Гў"
         if self.is_stalemate():
             if self.position.turn_to_move == self.our_color:
-                return "Вам поставили пат. Ничья"
-            return "Вы поставили пат. Ничья"
+                return "Г‚Г Г¬ ГЇГ®Г±ГІГ ГўГЁГ«ГЁ ГЇГ ГІ. ГЌГЁГ·ГјГї"
+            return "Г‚Г» ГЇГ®Г±ГІГ ГўГЁГ«ГЁ ГЇГ ГІ. ГЌГЁГ·ГјГї"
         if self.is_mate():
             if self.position.turn_to_move == self.our_color:
-                return "Вам поставили мат :("
-            return "Вы поставили мат. Поздравляю!"
+                return "Г‚Г Г¬ ГЇГ®Г±ГІГ ГўГЁГ«ГЁ Г¬Г ГІ :("
+            return "Г‚Г» ГЇГ®Г±ГІГ ГўГЁГ«ГЁ Г¬Г ГІ. ГЏГ®Г§Г¤Г°Г ГўГ«ГїГѕ!"
         return None
 
     def string_to_move(self, string):
@@ -102,7 +102,7 @@ def run():
             while not move:
                 move = game.string_to_move(input())
                 if not move:
-                    print("Неправильный формат ввода или ход невозможен")
+                    print("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»Г© ГґГ®Г°Г¬Г ГІ ГўГўГ®Г¤Г  ГЁГ«ГЁ ГµГ®Г¤ Г­ГҐГўГ®Г§Г¬Г®Г¦ГҐГ­")
         else:
             move = game.get_move_of_bot()
         game.make_move(move)
