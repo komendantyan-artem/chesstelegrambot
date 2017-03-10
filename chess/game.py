@@ -12,6 +12,7 @@ class Game:
         assert(color in ["white", "black"])
         self.position = Position()
         self.our_color = ptypes.WHITE if color == "white" else ptypes.BLACK
+        self.is_reversed_image = (self.our_color == ptypes.BLACK)
         self.positions_count = defaultdict(int)
         self.number_of_insignificant_plies = 0
         self.positions_count[repr(self.position)] += 1
@@ -93,20 +94,20 @@ class Game:
     
     def start_game(self):
         if self.position.turn_to_move == self.our_color:
-            return [str(self.position).replace('.', '#')]
+            return [self.position.get_fen(reverse=self.is_reversed_image)]
         else:
             self.make_move(self.get_move_of_bot())
-            return [str(self.position).replace('.', '#')]
+            return [self.position.get_fen(reverse=self.is_reversed_image)]
         
     def step(self, string):
         move = self.string_to_move(string)
         if not move:
-            return ["Неправильный формат ввода или ход невозможен"]
+            return "Неправильный формат ввода или ход невозможен"
         result = []
         self.make_move(move)
-        result.append(str(self.position).replace('.', '#'))
+        result.append(self.position.get_fen(reverse=self.is_reversed_image))
         if self.get_end_verdict():
             return result
         self.make_move(self.get_move_of_bot())
-        result.append(str(self.position).replace('.', '#'))
+        result.append(self.position.get_fen(reverse=self.is_reversed_image))
         return result

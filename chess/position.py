@@ -30,6 +30,27 @@ class Position:
     def __repr__(self):
         return (repr(self.board) + repr(self.turn_to_move) +
                 repr(self.castling) + repr(self.en_passant))
+    
+    def get_fen(self, reverse=False):
+        strings = str(self).split()
+        answer = []
+        for row in strings:
+            empty = 0
+            current = ""
+            for i in row:
+                if i == '.':
+                    empty += 1
+                else:
+                    if empty != 0:
+                        current += str(empty)
+                    current += i
+                    empty = 0
+            if empty != 0:
+                current += str(empty)
+            answer.append(current)
+        if reverse:
+            answer = [''.join(reversed(i)) for i in reversed(answer)]
+        return '/'.join(answer)
 
     def setup(self, fen=None):
         if fen == None:
