@@ -24,12 +24,13 @@ def stop(message):
 
 @bot.message_handler(commands=["start"])
 def start(message):
+    text = ''.join(message.text.lower().split()[1:])
     if games[message.chat.id]:
         bot.send_message(message.chat.id, "Вы не можете начать новую игру пока идет старая")
-    elif message.text.split() == ["/start", "white"]:
+    elif text == "white":
         games[message.chat.id] = Game("white")
         output_board(message.chat.id, games[message.chat.id].start_game())
-    elif message.text.split() == ["/start", "black"]:
+    elif text == "black":
         games[message.chat.id] = Game("black")
         output_board(message.chat.id, games[message.chat.id].start_game())
     else:
@@ -41,7 +42,7 @@ def move(message):
     if not game:
         bot.send_message(message.chat.id, "Игра еще не начата")
         return
-    string = message.text[5:]
+    string = ''.join(message.text.split()[1:])
     if game.string_to_move(string):
         bot.send_message(message.chat.id, "Ваш ход принят")
     output_board(message.chat.id, game.step(string))
