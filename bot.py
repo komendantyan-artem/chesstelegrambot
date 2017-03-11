@@ -3,8 +3,9 @@
 import config
 import telebot
 from chess.game import Game
+from collections import defaultdict
 
-game = None
+games = defaultdict(lambda: None)
 bot = telebot.TeleBot(config.token)
 
 
@@ -15,37 +16,35 @@ def help(message):
 
 @bot.message_handler(commands=["stop"])  
 def stop(message):
-    global game
-    if game:
-        game = None
+    if games[message.chat.id]:
+        games[message.chat.id] = None
         bot.send_message(message.chat.id, "Игра остановлена")
     else:
         bot.send_message(message.chat.id, "Игра не начиналась")
 
 @bot.message_handler(commands=["start"])
 def start(message):
-    global game
-    if game:
+    if games[message.chat.id]:
         bot.send_message(message.chat.id, "Вы не можете начать новую игру пока идет старая")
     elif message.text.split() == ["/start", "white"]:
-        game = Game("white")
-        output_board(message.chat.id, game.start_game())
+        games[message.chat.id] = Game("white")
+        output_board(message.chat.id, games[message.chat.id].start_game())
     elif message.text.split() == ["/start", "black"]:
-        game = Game("black")
-        output_board(message.chat.id, game.start_game())
+        games[message.chat.id] = Game("black")
+        output_board(message.chat.id, games[message.chat.id].start_game())
     else:
         bot.send_message(message.chat.id, "Неправильный формат ввода. Введите /help если вам нужна помощь")
         
 @bot.message_handler(commands=["move"])
 def move(message):
-    global game
+    game = games[message.chat.id]
     if not game:
         bot.send_message(message.chat.id, "Игра еще не начата")
         return
     output_board(message.chat.id, game.step(message.text[5:]))
     if game.get_end_verdict():
         bot.send_message(message.chat.id, game.get_end_verdict())
-        game = None
+        games[message.chat.id] = None
         
 def output_board(chat_id, fens):
     if isinstance(fens, str):
