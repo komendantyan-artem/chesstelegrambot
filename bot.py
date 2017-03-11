@@ -41,7 +41,10 @@ def move(message):
     if not game:
         bot.send_message(message.chat.id, "Игра еще не начата")
         return
-    output_board(message.chat.id, game.step(message.text[5:]))
+    string = message.text[5:]
+    if game.string_to_move(string):
+        bot.send_message(message.chat.id, "Ваш ход принят")
+    output_board(message.chat.id, game.step(string))
     if game.get_end_verdict():
         bot.send_message(message.chat.id, game.get_end_verdict())
         games[message.chat.id] = None
