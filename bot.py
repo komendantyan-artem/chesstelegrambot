@@ -49,7 +49,7 @@ def move(message):
         
 def output_board(chat_id, fens):
     if isinstance(fens, str):
-        bot.send_message(chat_id, positions)
+        bot.send_message(chat_id, fens)
         return
     for fen in fens:
         link = "http://kasparovchess.crestbook.com/extensions/chess_diagram/gendiag.php?fen={0}".format(fen)
