@@ -7,6 +7,7 @@ from chess.game import Game
 game = None
 bot = telebot.TeleBot(config.token)
 
+
 @bot.message_handler(commands=["help"])
 def help(message):
     with open("help.txt") as help:
@@ -46,9 +47,15 @@ def move(message):
         bot.send_message(message.chat.id, game.get_end_verdict())
         game = None
         
-def output_board(chat_id, boards):
-    bot.send_message(chat_id, '\n\n'.join(boards))
+def output_board(chat_id, fens):
+    if isinstance(fens, str):
+        bot.send_message(chat_id, positions)
+        return
+    for fen in fens:
+        link = "http://kasparovchess.crestbook.com/extensions/chess_diagram/gendiag.php?fen={0}".format(fen)
+        answer = '<a href="{0}">.</a>'.format(link)
+        bot.send_message(chat_id, answer, parse_mode="HTML")
 
 
 if __name__ == '__main__':
-     bot.polling(none_stop=True)
+    bot.polling(none_stop=True)
